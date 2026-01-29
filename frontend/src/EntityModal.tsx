@@ -166,7 +166,62 @@ const ENTITY_DATA: Record<string, EntityInfo> = {
     founded: 2022,
     founders: ["Brett Adcock"]
   },
+  microsoft: {
+    description:
+      "Microsoft develops AI products including Azure AI, Microsoft Copilot, and partners with OpenAI. Provides cloud infrastructure and AI services through Azure.",
+    founded: 1975,
+    founders: ["Bill Gates", "Paul Allen"]
+  },
+  // Chinese AI Companies
+  baidu: {
+    description:
+      "Baidu is China's leading AI company, developing Ernie large language models, autonomous driving (Apollo), and AI cloud services.",
+    founded: 2000,
+    founders: ["Robin Li", "Eric Xu"]
+  },
+  alibaba: {
+    description:
+      "Alibaba Cloud develops Tongyi large language models and provides AI cloud services. Part of Alibaba Group, China's largest e-commerce and cloud company.",
+    founded: 1999,
+    founders: ["Jack Ma"]
+  },
+  tencent: {
+    description:
+      "Tencent develops Hunyuan AI models, AI for gaming and social platforms (WeChat), and cloud AI services. One of China's largest tech companies.",
+    founded: 1998,
+    founders: ["Ma Huateng", "Zhang Zhidong"]
+  },
+  bytedance: {
+    description:
+      "ByteDance develops AI for TikTok recommendation algorithms, video generation, and AI research. Parent company of TikTok and Douyin.",
+    founded: 2012,
+    founders: ["Zhang Yiming"]
+  },
+  sensetime: {
+    description:
+      "SenseTime is a leading Chinese AI company specializing in computer vision, autonomous driving, and facial recognition technology.",
+    founded: 2014,
+    founders: ["Xu Li", "Tang Xiaoou"]
+  },
+  iflytek: {
+    description:
+      "iFlytek is a Chinese AI company specializing in speech recognition, natural language processing, and voice AI technology.",
+    founded: 1999,
+    founders: ["Liu Qingfeng"]
+  },
   // AI Infrastructure Companies
+  aws: {
+    description:
+      "Amazon Web Services (AWS) provides cloud AI infrastructure, Bedrock (managed LLM service), SageMaker (ML platform), and GPU instances for AI workloads.",
+    founded: 2006,
+    founders: ["Amazon"]
+  },
+  azure: {
+    description:
+      "Azure AI provides cloud infrastructure, managed AI services, and GPU instances. Microsoft's cloud AI platform powering OpenAI, Mistral, and other AI companies.",
+    founded: 2010,
+    founders: ["Microsoft"]
+  },
   databricks: {
     description:
       "Databricks provides a unified analytics platform for data engineering, machine learning, and AI workloads.",

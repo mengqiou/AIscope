@@ -91,21 +91,59 @@ def company_events(company_id: int, db: Session = Depends(get_db)):
 
 @app.get("/events")
 def list_events(db: Session = Depends(get_db)):
+    from backend.models.events import EventEntityRole
+    from backend.models.entities import Entity
+    
     events = (
         db.query(Event)
         .order_by(Event.occurred_at.desc().nullslast())
         .limit(200)
         .all()
     )
-    return [
-        {
+    
+    result = []
+    for ev in events:
+        # Get entities involved in this event
+        entity_roles = (
+            db.query(EventEntityRole, Entity)
+            .join(Entity, EventEntityRole.entity_id == Entity.id)
+            .filter(EventEntityRole.event_id == ev.id)
+            .all()
+        )
+        
+        entities = [
+            {
+                "name": entity.name,
+                "type": entity.type,
+                "role": role.role,
+            }
+            for role, entity in entity_roles
+        ]
+        
+        # Get source document URL if available
+        from backend.models.events import Mention
+        from backend.models.documents import Document
+        mention = (
+            db.query(Mention)
+            .filter(Mention.event_id == ev.id)
+            .first()
+        )
+        source_url = None
+        if mention:
+            doc = db.query(Document).filter(Document.id == mention.document_id).first()
+            if doc:
+                source_url = doc.url
+        
+        result.append({
             "id": ev.id,
             "type": ev.type,
-            "occurred_at": ev.occurred_at,
-            "recorded_at": ev.recorded_at,
+            "occurred_at": ev.occurred_at.isoformat() if ev.occurred_at else None,
+            "recorded_at": ev.recorded_at.isoformat() if ev.recorded_at else None,
             "attributes": ev.attributes,
             "confidence": ev.confidence,
-        }
-        for ev in events
-    ]
+            "entities": entities,
+            "source_url": source_url,
+        })
+    
+    return result
 

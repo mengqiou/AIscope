@@ -36,8 +36,19 @@ export const NODES: EntityNode[] = [
   { id: "reka", label: "Reka AI", type: "ai_product_company" },
   { id: "runway", label: "Runway", type: "ai_product_company" },
   { id: "folio", label: "Figure AI", type: "ai_product_company" },
+  { id: "microsoft", label: "Microsoft", type: "ai_product_company" },
+  
+  // Chinese AI Companies
+  { id: "baidu", label: "Baidu", type: "ai_product_company" },
+  { id: "alibaba", label: "Alibaba Cloud", type: "ai_product_company" },
+  { id: "tencent", label: "Tencent", type: "ai_product_company" },
+  { id: "bytedance", label: "ByteDance", type: "ai_product_company" },
+  { id: "sensetime", label: "SenseTime", type: "ai_product_company" },
+  { id: "iflytek", label: "iFlytek", type: "ai_product_company" },
   
   // AI Infrastructure Companies (provide platforms, tools, compute)
+  { id: "aws", label: "AWS", type: "ai_infra_company" },
+  { id: "azure", label: "Azure AI", type: "ai_infra_company" },
   { id: "databricks", label: "Databricks", type: "ai_infra_company" },
   { id: "snowflake", label: "Snowflake", type: "ai_infra_company" },
   { id: "huggingface", label: "Hugging Face", type: "ai_infra_company" },
@@ -231,6 +242,110 @@ export const LINKS: EntityLink[] = [
     label: "GPU infrastructure",
     type: "infrastructure",
     description: "CoreWeave builds cloud infrastructure using NVIDIA GPUs for AI workloads."
+  },
+  
+  // Microsoft relationships
+  {
+    source: "microsoft",
+    target: "openai",
+    label: "Strategic partner / investor",
+    type: "partnership",
+    description: "Microsoft has invested over $13B in OpenAI and provides Azure infrastructure for GPT models. OpenAI powers Microsoft Copilot."
+  },
+  {
+    source: "azure",
+    target: "openai",
+    label: "Cloud infrastructure",
+    type: "infrastructure",
+    description: "Azure provides cloud infrastructure for OpenAI's model training and inference."
+  },
+  {
+    source: "microsoft",
+    target: "mistral",
+    label: "Strategic partner",
+    type: "partnership",
+    description: "Microsoft partners with Mistral AI, providing Azure infrastructure and integrating Mistral models into Azure AI."
+  },
+  {
+    source: "azure",
+    target: "mistral",
+    label: "Cloud infrastructure",
+    type: "infrastructure",
+    description: "Azure provides cloud infrastructure for Mistral AI's models."
+  },
+  
+  // AWS relationships
+  {
+    source: "aws",
+    target: "anthropic",
+    label: "Strategic partner / investor",
+    type: "partnership",
+    description: "AWS has invested $4B in Anthropic and provides cloud infrastructure. Anthropic's Claude models are available on AWS Bedrock."
+  },
+  {
+    source: "aws",
+    target: "stability",
+    label: "Cloud infrastructure",
+    type: "infrastructure",
+    description: "AWS provides cloud infrastructure for Stability AI's model training and deployment."
+  },
+  {
+    source: "aws",
+    target: "cohere",
+    label: "Cloud infrastructure",
+    type: "infrastructure",
+    description: "AWS provides cloud infrastructure for Cohere's language models, available on AWS Bedrock."
+  },
+  {
+    source: "aws",
+    target: "nvidia",
+    label: "GPU infrastructure",
+    type: "infrastructure",
+    description: "AWS offers NVIDIA GPU instances (P4, P5) for AI workloads and model training."
+  },
+  
+  // Chinese AI company relationships
+  {
+    source: "baidu",
+    target: "nvidia",
+    label: "GPU provider",
+    type: "infrastructure",
+    description: "NVIDIA provides GPUs for Baidu's Ernie large language models and autonomous driving AI."
+  },
+  {
+    source: "alibaba",
+    target: "nvidia",
+    label: "GPU provider",
+    type: "infrastructure",
+    description: "NVIDIA provides GPUs for Alibaba Cloud's Tongyi large language models and cloud AI services."
+  },
+  {
+    source: "tencent",
+    target: "nvidia",
+    label: "GPU provider",
+    type: "infrastructure",
+    description: "NVIDIA provides GPUs for Tencent's Hunyuan AI models and cloud gaming AI."
+  },
+  {
+    source: "bytedance",
+    target: "nvidia",
+    label: "GPU provider",
+    type: "infrastructure",
+    description: "NVIDIA provides GPUs for ByteDance's AI research, TikTok recommendation algorithms, and video generation models."
+  },
+  {
+    source: "sensetime",
+    target: "nvidia",
+    label: "GPU provider",
+    type: "infrastructure",
+    description: "NVIDIA provides GPUs for SenseTime's computer vision models and autonomous driving AI."
+  },
+  {
+    source: "alibaba",
+    target: "openai",
+    label: "Partnership",
+    type: "partnership",
+    description: "Alibaba Cloud partners with OpenAI to provide AI services in China and integrate GPT models."
   },
 ];
 

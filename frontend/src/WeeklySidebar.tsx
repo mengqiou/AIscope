@@ -137,6 +137,11 @@ export const WeeklySidebar: React.FC<WeeklySidebarProps> = ({
                     // ignore parse errors
                   }
                 }
+                // Get entity names for display
+                const entityNames = ev.entities
+                  ? ev.entities.map((e) => e.name).join(", ")
+                  : null;
+
                 return (
                   <ListItem
                     key={ev.id}
@@ -154,19 +159,30 @@ export const WeeklySidebar: React.FC<WeeklySidebarProps> = ({
                             sx={{
                               display: "flex",
                               justifyContent: "space-between",
-                              gap: 1
+                              gap: 1,
+                              alignItems: "flex-start"
                             }}
                           >
-                            <Typography
-                              variant="body2"
-                              sx={{ textTransform: "capitalize", fontWeight: 500 }}
-                            >
-                              {ev.type}
-                            </Typography>
+                            <Box sx={{ flex: 1 }}>
+                              <Typography
+                                variant="body2"
+                                sx={{ textTransform: "capitalize", fontWeight: 500 }}
+                              >
+                                {ev.type}
+                              </Typography>
+                              {entityNames && (
+                                <Typography
+                                  variant="caption"
+                                  sx={{ color: "text.secondary", display: "block", mt: 0.25 }}
+                                >
+                                  {entityNames}
+                                </Typography>
+                              )}
+                            </Box>
                             {occurred && (
                               <Typography
                                 variant="caption"
-                                sx={{ color: "text.secondary" }}
+                                sx={{ color: "text.secondary", flexShrink: 0 }}
                               >
                                 {occurred}
                               </Typography>
@@ -177,7 +193,7 @@ export const WeeklySidebar: React.FC<WeeklySidebarProps> = ({
                           summary && (
                             <Typography
                               variant="body2"
-                              sx={{ color: "text.secondary", mt: 0.5 }}
+                              sx={{ color: "text.secondary", mt: 0.5, lineHeight: 1.4 }}
                             >
                               {summary}
                             </Typography>

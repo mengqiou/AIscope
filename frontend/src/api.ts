@@ -1,3 +1,9 @@
+export interface EventEntity {
+  name: string;
+  type: string;
+  role: string | null;
+}
+
 export interface EventDto {
   id: number;
   type: string;
@@ -5,6 +11,8 @@ export interface EventDto {
   recorded_at: string;
   attributes: string | null;
   confidence: number | null;
+  entities?: EventEntity[];
+  source_url?: string | null;
 }
 
 const API_BASE_URL =
