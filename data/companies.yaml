@@ -1,0 +1,68 @@
+companies:
+  - id: openai
+    name: OpenAI
+    type: company
+    aliases:
+      - Open AI
+    domains:
+      - openai.com
+  - id: anthropic
+    name: Anthropic
+    type: company
+    aliases: []
+    domains:
+      - anthropic.com
+  - id: xai
+    name: xAI
+    type: company
+    aliases:
+      - x.ai
+    domains:
+      - x.ai
+  - id: scale_ai
+    name: Scale AI
+    type: company
+    aliases:
+      - ScaleAI
+    domains:
+      - scale.com
+  - id: databricks
+    name: Databricks
+    type: company
+    aliases: []
+    domains:
+      - databricks.com
+  - id: huggingface
+    name: Hugging Face
+    type: company
+    aliases:
+      - HuggingFace
+    domains:
+      - huggingface.co
+  - id: perplexity
+    name: Perplexity
+    type: company
+    aliases: []
+    domains:
+      - perplexity.ai
+  - id: adequatellm
+    name: Adept AI
+    type: company
+    aliases:
+      - Adept
+    domains:
+      - adept.ai
+  - id: groq
+    name: Groq
+    type: company
+    aliases: []
+    domains:
+      - groq.com
+  - id: mistral
+    name: Mistral AI
+    type: company
+    aliases:
+      - Mistral
+    domains:
+      - mistral.ai
+

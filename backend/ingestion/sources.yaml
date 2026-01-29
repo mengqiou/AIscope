@@ -1,0 +1,12 @@
+rss_feeds:
+  - name: OpenAI Blog
+    url: https://openai.com/blog/rss
+  - name: Anthropic Blog
+    url: https://www.anthropic.com/news/rss
+  - name: Databricks Blog
+    url: https://www.databricks.com/feed
+
+news_feeds:
+  - name: TechCrunch AI
+    url: https://techcrunch.com/tag/artificial-intelligence/feed/
+
