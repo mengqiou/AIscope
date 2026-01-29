@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Box,
@@ -9,10 +9,18 @@ import {
 } from "@mui/material";
 import GraphView from "./GraphView";
 import WeeklySidebar from "./WeeklySidebar";
+import EntityModal from "./EntityModal";
+import EventModal from "./EventModal";
+import EdgeModal from "./EdgeModal";
+import { EntityNode, EntityLink } from "./graphData";
+import { EventDto } from "./api";
 
 const App: React.FC = () => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("md"));
+  const [selectedEntity, setSelectedEntity] = useState<EntityNode | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<EventDto | null>(null);
+  const [selectedEdge, setSelectedEdge] = useState<EntityLink | null>(null);
 
   return (
     <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
@@ -63,19 +71,48 @@ const App: React.FC = () => {
               border: "1px solid rgba(148, 163, 184, 0.25)",
               height: isSmall ? "calc(100vh - 140px)" : "100%"
             }}
-          >
-            <GraphView />
+            >
+            <GraphView
+              onNodeClick={setSelectedEntity}
+              onEdgeClick={setSelectedEdge}
+            />
           </Box>
         </Box>
 
-        {!isSmall && <WeeklySidebar anchor="right" />}
+        {!isSmall && (
+          <WeeklySidebar
+            anchor="right"
+            onEventClick={setSelectedEvent}
+          />
+        )}
       </Box>
 
       {isSmall && (
         <Box sx={{ height: 260, borderTop: "1px solid rgba(148,163,184,0.25)" }}>
-          <WeeklySidebar anchor="right" />
+          <WeeklySidebar
+            anchor="right"
+            onEventClick={setSelectedEvent}
+          />
         </Box>
       )}
+
+      <EntityModal
+        open={selectedEntity !== null}
+        entity={selectedEntity}
+        onClose={() => setSelectedEntity(null)}
+      />
+
+      <EventModal
+        open={selectedEvent !== null}
+        event={selectedEvent}
+        onClose={() => setSelectedEvent(null)}
+      />
+
+      <EdgeModal
+        open={selectedEdge !== null}
+        edge={selectedEdge}
+        onClose={() => setSelectedEdge(null)}
+      />
     </Box>
   );
 };

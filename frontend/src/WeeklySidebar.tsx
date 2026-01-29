@@ -5,6 +5,7 @@ import {
   IconButton,
   List,
   ListItem,
+  ListItemButton,
   ListItemText,
   Typography
 } from "@mui/material";
@@ -14,12 +15,14 @@ import { EventDto, fetchEvents } from "./api";
 
 interface WeeklySidebarProps {
   anchor?: "right" | "left";
+  onEventClick?: (event: EventDto) => void;
 }
 
 const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 
 export const WeeklySidebar: React.FC<WeeklySidebarProps> = ({
-  anchor = "right"
+  anchor = "right",
+  onEventClick
 }) => {
   const [open, setOpen] = useState(true);
   const [events, setEvents] = useState<EventDto[]>([]);
@@ -135,43 +138,53 @@ export const WeeklySidebar: React.FC<WeeklySidebarProps> = ({
                   }
                 }
                 return (
-                  <ListItem key={ev.id} alignItems="flex-start">
-                    <ListItemText
-                      primary={
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            gap: 1
-                          }}
-                        >
-                          <Typography
-                            variant="body2"
-                            sx={{ textTransform: "capitalize" }}
+                  <ListItem
+                    key={ev.id}
+                    alignItems="flex-start"
+                    disablePadding
+                    sx={{ cursor: onEventClick ? "pointer" : "default" }}
+                  >
+                    <ListItemButton
+                      onClick={() => onEventClick?.(ev)}
+                      sx={{ py: 1 }}
+                    >
+                      <ListItemText
+                        primary={
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              gap: 1
+                            }}
                           >
-                            {ev.type}
-                          </Typography>
-                          {occurred && (
                             <Typography
-                              variant="caption"
-                              sx={{ color: "text.secondary" }}
+                              variant="body2"
+                              sx={{ textTransform: "capitalize", fontWeight: 500 }}
                             >
-                              {occurred}
+                              {ev.type}
                             </Typography>
-                          )}
-                        </Box>
-                      }
-                      secondary={
-                        summary && (
-                          <Typography
-                            variant="body2"
-                            sx={{ color: "text.secondary", mt: 0.5 }}
-                          >
-                            {summary}
-                          </Typography>
-                        )
-                      }
-                    />
+                            {occurred && (
+                              <Typography
+                                variant="caption"
+                                sx={{ color: "text.secondary" }}
+                              >
+                                {occurred}
+                              </Typography>
+                            )}
+                          </Box>
+                        }
+                        secondary={
+                          summary && (
+                            <Typography
+                              variant="body2"
+                              sx={{ color: "text.secondary", mt: 0.5 }}
+                            >
+                              {summary}
+                            </Typography>
+                          )
+                        }
+                      />
+                    </ListItemButton>
                   </ListItem>
                 );
               })}
