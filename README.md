@@ -87,6 +87,8 @@ AIscope/
 
 ### Backend Setup
 
+Run all of the following commands from the **project root** (`AIscope/`), not from `backend/`.
+
 1. **Create virtual environment:**
 
    ```bash
@@ -135,7 +137,7 @@ AIscope/
    python -m uvicorn backend.main:app --reload --port 8000
    ```
 
-   The API will be available at `http://localhost:8000`
+   The API will be available at `http://localhost:8000`. Confirm with `http://localhost:8000/health`.
 
 ### Frontend Setup
 

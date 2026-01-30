@@ -11,14 +11,16 @@ import {
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { EventDto, fetchEvents } from "./api";
+import type { EventDto } from "./types";
+import { fetchEvents } from "./api";
 
 interface WeeklySidebarProps {
   anchor?: "right" | "left";
   onEventClick?: (event: EventDto) => void;
 }
 
-const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+/** Show events from the last 30 days so acquisition/news from ~1 month ago still appear. */
+const RECENT_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
 export const WeeklySidebar: React.FC<WeeklySidebarProps> = ({
   anchor = "right",
@@ -33,13 +35,13 @@ export const WeeklySidebar: React.FC<WeeklySidebarProps> = ({
       try {
         const all = await fetchEvents();
         const now = Date.now();
-        const thisWeek = all.filter((ev) => {
+        const recent = all.filter((ev) => {
           if (!ev.occurred_at) return false;
           const t = Date.parse(ev.occurred_at);
           if (Number.isNaN(t)) return false;
-          return now - t <= ONE_WEEK_MS;
+          return now - t <= RECENT_DAYS_MS;
         });
-        setEvents(thisWeek);
+        setEvents(recent);
       } catch (e) {
         console.error(e);
         setError("Failed to load weekly events");
@@ -81,7 +83,7 @@ export const WeeklySidebar: React.FC<WeeklySidebarProps> = ({
       >
         {open && (
           <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-            What&apos;s new this week
+            Recent events
           </Typography>
         )}
         <IconButton
@@ -116,7 +118,7 @@ export const WeeklySidebar: React.FC<WeeklySidebarProps> = ({
           )}
           {!error && sorted.length === 0 && (
             <Typography variant="body2" sx={{ px: 2, py: 1.5 }}>
-              No events detected in the last 7 days yet.
+              No recent events yet.
             </Typography>
           )}
           {!error && sorted.length > 0 && (

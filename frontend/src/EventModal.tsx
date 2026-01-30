@@ -15,7 +15,7 @@ import {
   ListItemText
 } from "@mui/material";
 import LaunchIcon from "@mui/icons-material/Launch";
-import { EventDto } from "./api";
+import type { EventDto } from "./types";
 
 interface EventModalProps {
   open: boolean;
@@ -46,23 +46,32 @@ export const EventModal: React.FC<EventModalProps> = ({
       day: "numeric"
     });
 
-  let attributes: Record<string, any> = {};
+  let attributes: Record<string, unknown> = {};
   let summary: string | undefined;
   let amountUsd: number | undefined;
   let round: string | undefined;
   let productName: string | undefined;
 
-  if (event.attributes) {
-    try {
-      attributes = JSON.parse(event.attributes);
-      summary = attributes.summary;
-      amountUsd = attributes.amount_usd;
-      round = attributes.round;
-      productName = attributes.product_name;
-    } catch {
-      // ignore parse errors
+  if (event.attributes != null) {
+    if (typeof event.attributes === "string") {
+      console.log("attributes 1", event.attributes);
+      try {
+        attributes = JSON.parse(event.attributes.replace(/'/g, '"'));
+        summary = attributes.summary as string | undefined;
+        amountUsd = attributes.amount_usd as number | undefined;
+        round = attributes.round as string | undefined;
+        productName = attributes.product_name as string | undefined;
+      } catch (e) {
+        console.log("attributes 2", e);
+        attributes = {} as Record<string, unknown>;
+      }
     }
   }
+
+  const sourceUrl =
+    event.source_url ??
+    (typeof attributes.source_url === "string" ? attributes.source_url : undefined) ??
+    (typeof attributes.url === "string" ? attributes.url : undefined);
 
   return (
     <Dialog
@@ -105,7 +114,6 @@ export const EventModal: React.FC<EventModalProps> = ({
           </Box>
         )}
 
-        {/* Key Details */}
         <Box sx={{ mb: 2, display: "flex", flexDirection: "column", gap: 1 }}>
           {amountUsd && (
             <Box>
@@ -135,9 +143,8 @@ export const EventModal: React.FC<EventModalProps> = ({
           )}
         </Box>
 
-        {/* Entities Involved */}
         {event.entities && event.entities.length > 0 && (
-          <>
+          <Box>
             <Divider sx={{ my: 2 }} />
             <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
               Entities Involved
@@ -161,51 +168,46 @@ export const EventModal: React.FC<EventModalProps> = ({
                 </ListItem>
               ))}
             </List>
-          </>
+          </Box>
         )}
 
-        {/* Summary */}
-        {summary && (
-          <>
+        {/* summary is a must */}
+        <Box>
+          <Divider sx={{ my: 2 }} />
+          <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
+            Summary
+          </Typography>
+          <Typography variant="body1" sx={{ lineHeight: 1.7, whiteSpace: "pre-wrap" }}>
+            {summary}
+          </Typography>
+        </Box>
+
+        {sourceUrl && (
+          <Box>
             <Divider sx={{ my: 2 }} />
             <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
-              Summary
+              Source
             </Typography>
-            <Typography variant="body1" sx={{ lineHeight: 1.7, whiteSpace: "pre-wrap" }}>
-              {summary}
-            </Typography>
-          </>
+            <Link
+              href={sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 0.5,
+                color: "primary.main",
+                textDecoration: "none",
+                "&:hover": { textDecoration: "underline" }
+              }}
+            >
+              {sourceUrl}
+              <LaunchIcon fontSize="small" />
+            </Link>
+          </Box>
         )}
 
-        {/* Source URL */}
-        {event.source_url && (
-          <>
-            <Divider sx={{ my: 2 }} />
-            <Box>
-              <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
-                Source
-              </Typography>
-              <Link
-                href={event.source_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 0.5,
-                  color: "primary.main",
-                  textDecoration: "none",
-                  "&:hover": { textDecoration: "underline" }
-                }}
-              >
-                {event.source_url}
-                <LaunchIcon fontSize="small" />
-              </Link>
-            </Box>
-          </>
-        )}
-
-        {!summary && !event.entities?.length && !event.source_url && (
+        {!summary && !event.entities?.length && !sourceUrl && (
           <Typography variant="body2" sx={{ color: "text.secondary", fontStyle: "italic" }}>
             No detailed information available for this event.
           </Typography>

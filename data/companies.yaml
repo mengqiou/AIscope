@@ -66,3 +66,96 @@ companies:
     domains:
       - mistral.ai
 
+  # Added: major infra + chips + China AI (for search validation)
+  - id: microsoft
+    name: Microsoft
+    type: company
+    aliases:
+      - Microsoft Corporation
+    domains:
+      - microsoft.com
+
+  - id: aws
+    name: Amazon Web Services
+    type: company
+    aliases:
+      - AWS
+      - Amazon AWS
+    domains:
+      - aws.amazon.com
+
+  - id: nvidia
+    name: NVIDIA
+    type: company
+    aliases:
+      - Nvidia
+    domains:
+      - nvidia.com
+
+  - id: amd
+    name: AMD
+    type: company
+    aliases:
+      - Advanced Micro Devices
+    domains:
+      - amd.com
+
+  - id: intel
+    name: Intel
+    type: company
+    aliases: []
+    domains:
+      - intel.com
+
+  - id: baidu
+    name: Baidu
+    type: company
+    aliases: []
+    domains:
+      - baidu.com
+
+  - id: alibaba_cloud
+    name: Alibaba Cloud
+    type: company
+    aliases:
+      - Alibaba
+    domains:
+      - alibabacloud.com
+
+  - id: tencent
+    name: Tencent
+    type: company
+    aliases: []
+    domains:
+      - tencent.com
+
+  - id: bytedance
+    name: ByteDance
+    type: company
+    aliases: []
+    domains:
+      - bytedance.com
+
+  - id: sensetime
+    name: SenseTime
+    type: company
+    aliases: []
+    domains:
+      - sensetime.com
+
+  - id: iflytek
+    name: iFlytek
+    type: company
+    aliases:
+      - iFLYTEK
+    domains:
+      - iflytek.com
+
+  - id: manus
+    name: Manus
+    type: company
+    aliases:
+      - Manus AI
+    domains:
+      - manus.ai
+

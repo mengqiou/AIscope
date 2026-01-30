@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -8,9 +8,13 @@ import {
   Typography,
   Box,
   Chip,
-  Divider
+  Divider,
+  List,
+  ListItem,
+  ListItemText
 } from "@mui/material";
 import { EntityNode } from "./graphData";
+import { EntitySearchResult, searchAndAddEntity } from "./api";
 
 interface EntityModalProps {
   open: boolean;
@@ -22,6 +26,17 @@ interface EntityInfo {
   description: string;
   founded?: number;
   founders?: string[];
+  acquisitions?: Array<{
+    acquired_by: string;
+    date: string | null;
+    amount_usd?: number | null;
+  }>;
+  related_events?: Array<{
+    type: string;
+    occurred_at: string | null;
+    summary?: string | null;
+    amount_usd?: number | null;
+  }>;
 }
 
 const getTypeLabel = (type: string) => {
@@ -209,6 +224,19 @@ const ENTITY_DATA: Record<string, EntityInfo> = {
     founded: 1999,
     founders: ["Liu Qingfeng"]
   },
+  manus: {
+    description:
+      "Manus is a Singapore-based AI startup that builds AI agents—autonomous systems that execute complex digital tasks. Originally founded in China in 2022, Manus was acquired by Meta in December 2025 for over $2B.",
+    founded: 2022,
+    founders: ["Founders from China (names not publicly disclosed)"],
+    acquisitions: [
+      {
+        acquired_by: "Meta",
+        date: "2025-12-29",
+        amount_usd: 2_000_000_000
+      }
+    ]
+  },
   // AI Infrastructure Companies
   aws: {
     description:
@@ -333,10 +361,42 @@ export const EntityModal: React.FC<EntityModalProps> = ({
   entity,
   onClose
 }) => {
+  const [searchData, setSearchData] = useState<EntitySearchResult | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch entity details from backend when modal opens
+  useEffect(() => {
+    if (open && entity) {
+      setLoading(true);
+      searchAndAddEntity(entity.label)
+        .then((data) => {
+          setSearchData(data);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch entity details:", err);
+          setSearchData(null);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setSearchData(null);
+    }
+  }, [open, entity]);
+
   if (!entity) return null;
 
-  const info = ENTITY_DATA[entity.id] || {
+  const staticInfo = ENTITY_DATA[entity.id] || {
     description: `${entity.label} is a ${getTypeLabel(entity.type)} in the AI ecosystem.`
+  };
+
+  // Merge static info with search data (search data takes precedence for dynamic info)
+  const info: EntityInfo = {
+    description: searchData?.description || staticInfo.description,
+    founded: searchData?.founded || staticInfo.founded,
+    founders: searchData?.founders || staticInfo.founders,
+    acquisitions: searchData?.acquisitions || staticInfo.acquisitions,
+    related_events: searchData?.related_events || staticInfo.related_events,
   };
 
   const isCompany =
@@ -413,6 +473,115 @@ export const EntityModal: React.FC<EntityModalProps> = ({
               )}
             </Box>
           </>
+        )}
+
+        {/* Acquisitions */}
+        {info.acquisitions && info.acquisitions.length > 0 && (
+          <>
+            <Divider sx={{ my: 2 }} />
+            <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
+              Acquisitions
+            </Typography>
+            <List dense>
+              {info.acquisitions.map((acq, idx) => {
+                const dateStr = acq.date
+                  ? new Date(acq.date).toLocaleDateString(undefined, {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric"
+                    })
+                  : null;
+                return (
+                  <ListItem key={idx} sx={{ px: 0 }}>
+                    <ListItemText
+                      primary={
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+                          <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                            Acquired by {acq.acquired_by}
+                          </Typography>
+                          {acq.amount_usd && (
+                            <Chip
+                              label={`$${(acq.amount_usd / 1_000_000_000).toFixed(1)}B`}
+                              size="small"
+                              color="primary"
+                            />
+                          )}
+                        </Box>
+                      }
+                      secondary={
+                        dateStr && (
+                          <Typography variant="caption" sx={{ color: "text.secondary", mt: 0.5 }}>
+                            {dateStr}
+                          </Typography>
+                        )
+                      }
+                    />
+                  </ListItem>
+                );
+              })}
+            </List>
+          </>
+        )}
+
+        {/* Related Events */}
+        {info.related_events && info.related_events.length > 0 && (
+          <>
+            <Divider sx={{ my: 2 }} />
+            <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
+              Recent Events
+            </Typography>
+            <List dense>
+              {info.related_events.map((ev, idx) => {
+                const dateStr = ev.occurred_at
+                  ? new Date(ev.occurred_at).toLocaleDateString(undefined, {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric"
+                    })
+                  : null;
+                return (
+                  <ListItem key={idx} sx={{ px: 0 }}>
+                    <ListItemText
+                      primary={
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+                          <Typography variant="body2" sx={{ textTransform: "capitalize", fontWeight: 500 }}>
+                            {ev.type}
+                          </Typography>
+                          {ev.amount_usd && (
+                            <Chip
+                              label={`$${(ev.amount_usd / 1_000_000_000).toFixed(1)}B`}
+                              size="small"
+                              color="primary"
+                            />
+                          )}
+                          {dateStr && (
+                            <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                              {dateStr}
+                            </Typography>
+                          )}
+                        </Box>
+                      }
+                      secondary={
+                        ev.summary && (
+                          <Typography variant="body2" sx={{ color: "text.secondary", mt: 0.5 }}>
+                            {ev.summary}
+                          </Typography>
+                        )
+                      }
+                    />
+                  </ListItem>
+                );
+              })}
+            </List>
+          </>
+        )}
+
+        {loading && (
+          <Box sx={{ textAlign: "center", py: 2 }}>
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+              Loading entity details...
+            </Typography>
+          </Box>
         )}
       </DialogContent>
       <DialogActions>

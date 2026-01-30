@@ -45,6 +45,7 @@ export const NODES: EntityNode[] = [
   { id: "bytedance", label: "ByteDance", type: "ai_product_company" },
   { id: "sensetime", label: "SenseTime", type: "ai_product_company" },
   { id: "iflytek", label: "iFlytek", type: "ai_product_company" },
+  { id: "manus", label: "Manus", type: "ai_product_company" },
   
   // AI Infrastructure Companies (provide platforms, tools, compute)
   { id: "aws", label: "AWS", type: "ai_infra_company" },
@@ -346,6 +347,15 @@ export const LINKS: EntityLink[] = [
     label: "Partnership",
     type: "partnership",
     description: "Alibaba Cloud partners with OpenAI to provide AI services in China and integrate GPT models."
+  },
+  
+  // Acquisition: Meta acquires Manus
+  {
+    source: "meta-ai",
+    target: "manus",
+    label: "Acquired",
+    type: "partnership",
+    description: "Meta acquired Manus AI for over $2B in December 2025. Manus builds AI agents for autonomous task execution."
   },
 ];
 

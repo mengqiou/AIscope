@@ -38,9 +38,16 @@ def main() -> None:
     session = SessionLocal()
 
     try:
+        # Clear existing bootstrap events if they exist (optional - uncomment to reset)
+        # existing_events = session.query(Event).all()
+        # for ev in existing_events:
+        #     session.delete(ev)
+        # session.flush()
+        
         # If there are already events, don't duplicate.
         if session.query(Event).count() > 0:
             print("Events already exist; skipping bootstrap.")
+            print("To regenerate, clear events from database or uncomment the clear code in the script.")
             return
 
         now = datetime.utcnow()
